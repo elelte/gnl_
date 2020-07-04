@@ -80,7 +80,7 @@
             <nav class="header__nav-wrap">
 
                 <ul class="header__nav">
-                    <li class="current"><a href="index.html" title="">Home</a></li>
+                    <li class="{{ (request()->is('home')) ? 'current' : '' }}"><a href="{{url('home')}}" title="">Home</a></li>
                     <li class="has-children">
                         <a href="#0" title="">Categories</a>
                         <ul class="sub-menu">
@@ -101,9 +101,8 @@
                         <li><a href="single-standard.html">Standard Post</a></li>
                         </ul>
                     </li>
-                    <li><a href="styles.html" title="">Styles</a></li>
-                    <li><a href="page-about.html" title="">About</a></li>
-                    <li><a href="page-contact.html" title="">Contact</a></li>
+                    <li class="{{ (request()->is('about')) ? 'current' : '' }}"><a href="{{url('about')}}" title="">About</a></li>
+                    <li class="{{ (request()->is('contact')) ? 'current' : '' }}"><a href="{{url('contact')}}" title="">Contact</a></li>
                 </ul> <!-- end header__nav -->
 
                 <ul class="header__social">
