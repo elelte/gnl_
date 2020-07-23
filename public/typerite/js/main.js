@@ -169,7 +169,7 @@
         var animateEl = $('.animate-this');
 
         $WIN.on('load', function() {
-
+        
             setTimeout(function() {
                 animateEl.each(function(ctr) {
                     var el = $(this);
