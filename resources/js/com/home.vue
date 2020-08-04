@@ -12,7 +12,7 @@
                         </div>
                         <div class="entry__text">
                             <div class="entry__header">
-                                <h2 class="entry__title"><a href="single-standard.html">{{index.content}}</a></h2>
+                                <h2 class="entry__title"><a href="single-standard.html">{{index.sub_content}}</a></h2>
                                 <div class="entry__meta">
                                     <span class="entry__meta-cat">
                                         <a href="category.html">Design</a> 
@@ -31,6 +31,21 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="column large-full">
+                <nav class="pgn">
+                    <ul>
+                        <li v-if="pagination.current_page != 1"><a class="pgn__prev" href="#0" @click="getBlog(pagination.first_page_url)">Prev</a></li>
+                        <li v-for="n in getPage()" :key="n">
+                            <a v-bind:class="{ current: pagination.current_page == n}" class="pgn__num" href="#" @click="getBlog(pagination.path + '?page=' + n)">{{n}}</a>
+                        </li>
+                        <li v-if="pagination.current_page != pagination.last_page"><a class="pgn__next" href="#0" @click="getBlog(pagination.last_page_url)">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -41,6 +56,7 @@
                 url     :'blog',
                 blog    : [],
                 loading : false,
+                pagination: {}
             }
         },
         created() {
@@ -48,12 +64,23 @@
         },
         methods: {
             /* GET API BLOG */
-            getBlog(){
-                axios.get(this.BASE_URL + this.url)
+            getBlog(url){
+                url = url || (this.BASE_URL + this.url);
+                axios.get(url)
                 .then(response => {
                     // Handle Success
                     this.loading = true;
                     this.blog = response.data.data.data;
+                    this.pagination = {
+                        from           : response.data.data.from,
+                        last_page      : response.data.data.last_page,
+                        current_page   : response.data.data.current_page,
+                        path           : response.data.data.path,
+                        next_page_url  : response.data.data.next_page_url,
+                        prev_page_url  : response.data.data.next_page_url,
+                        first_page_url : response.data.data.first_page_url,
+                        last_page_url  : response.data.data.last_page_url
+                    };
                 })
                 .catch(error => {
                     // Handle Error
@@ -91,6 +118,14 @@
                 containerBricks.imagesLoaded().progress( function() {
                     containerBricks.masonry('layout');
                 });
+            },
+            getPage(){
+                if (this.pagination.last_page > 5){
+                    return 5
+                }
+                else{
+                    return this.pagination.last_page
+                }
             }
         }
     }

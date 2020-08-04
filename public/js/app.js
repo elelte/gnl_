@@ -1944,12 +1944,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       url: 'blog',
       blog: [],
-      loading: false
+      loading: false,
+      pagination: {}
     };
   },
   created: function created() {
@@ -1957,13 +1973,24 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     /* GET API BLOG */
-    getBlog: function getBlog() {
+    getBlog: function getBlog(url) {
       var _this = this;
 
-      axios.get(this.BASE_URL + this.url).then(function (response) {
+      url = url || this.BASE_URL + this.url;
+      axios.get(url).then(function (response) {
         // Handle Success
         _this.loading = true;
         _this.blog = response.data.data.data;
+        _this.pagination = {
+          from: response.data.data.from,
+          last_page: response.data.data.last_page,
+          current_page: response.data.data.current_page,
+          path: response.data.data.path,
+          next_page_url: response.data.data.next_page_url,
+          prev_page_url: response.data.data.next_page_url,
+          first_page_url: response.data.data.first_page_url,
+          last_page_url: response.data.data.last_page_url
+        };
       })["catch"](function (error) {
         // Handle Error
         console.log(error);
@@ -1994,6 +2021,13 @@ __webpack_require__.r(__webpack_exports__);
       containerBricks.imagesLoaded().progress(function () {
         containerBricks.masonry('layout');
       });
+    },
+    getPage: function getPage() {
+      if (this.pagination.last_page > 5) {
+        return 5;
+      } else {
+        return this.pagination.last_page;
+      }
     }
   }
 });
@@ -37563,7 +37597,7 @@ var render = function() {
                   _c("div", { staticClass: "entry__header" }, [
                     _c("h2", { staticClass: "entry__title" }, [
                       _c("a", { attrs: { href: "single-standard.html" } }, [
-                        _vm._v(_vm._s(index.content))
+                        _vm._v(_vm._s(index.sub_content))
                       ])
                     ]),
                     _vm._v(" "),
@@ -37577,6 +37611,73 @@ var render = function() {
           }),
           0
         )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "column large-full" }, [
+        _c("nav", { staticClass: "pgn" }, [
+          _c(
+            "ul",
+            [
+              _vm.pagination.current_page != 1
+                ? _c("li", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "pgn__prev",
+                        attrs: { href: "#0" },
+                        on: {
+                          click: function($event) {
+                            return _vm.getBlog(_vm.pagination.first_page_url)
+                          }
+                        }
+                      },
+                      [_vm._v("Prev")]
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.getPage(), function(n) {
+                return _c("li", { key: n }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "pgn__num",
+                      class: { current: _vm.pagination.current_page == n },
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          return _vm.getBlog(_vm.pagination.path + "?page=" + n)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(n))]
+                  )
+                ])
+              }),
+              _vm._v(" "),
+              _vm.pagination.current_page != _vm.pagination.last_page
+                ? _c("li", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "pgn__next",
+                        attrs: { href: "#0" },
+                        on: {
+                          click: function($event) {
+                            return _vm.getBlog(_vm.pagination.last_page_url)
+                          }
+                        }
+                      },
+                      [_vm._v("Next")]
+                    )
+                  ])
+                : _vm._e()
+            ],
+            2
+          )
+        ])
       ])
     ])
   ])
@@ -49815,7 +49916,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 Vue.component('home', __webpack_require__(/*! ./com/home.vue */ "./resources/js/com/home.vue")["default"]);
-Vue.prototype.BASE_URL = "https://gaenael.com/gnl/";
+Vue.prototype.BASE_URL = "http://gaenael.com/owl_api/";
 var app = new Vue({
   el: '#app'
 });
