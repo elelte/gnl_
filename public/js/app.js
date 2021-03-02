@@ -49916,7 +49916,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 Vue.component('home', __webpack_require__(/*! ./com/home.vue */ "./resources/js/com/home.vue")["default"]);
-Vue.prototype.BASE_URL = "http://gaenael.com/owl_api/";
+Vue.prototype.BASE_URL = "https://gaenael.com/owl_api/";
 var app = new Vue({
   el: '#app'
 });
